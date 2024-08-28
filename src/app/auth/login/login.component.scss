@@ -1,0 +1,48 @@
+.Logincard {
+    width: 300px;
+    height: 400px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 25px;
+}
+
+body,
+html {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    margin: 150px;
+
+}
+
+.loginTitle {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: #2980b9;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 10px 0;
+    padding: 10px;
+    border-bottom: 2px solid #2980b9;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+#loginButon {
+    margin-top: 20px;
+}
+
+.link {
+    text-decoration: none;
+}
