@@ -22,4 +22,7 @@ export class AppServiceService {
   register(body: any): Observable<any> {
     return this.httpClient.post(this.serverUrl + '/User/RegisterUser', body);
   }
+  getNationalities(): Observable<any> {
+    return this.httpClient.get(this.serverUrl + '/Author/GetNationalities');
+  }
 }

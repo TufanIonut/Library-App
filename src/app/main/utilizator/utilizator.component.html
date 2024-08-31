@@ -16,23 +16,23 @@
         <div class="IsbnNat">
             <p-inputOtp id="ISBN" [(ngModel)]="CodeValue" [integerOnly]="true" [length]="13" />
             <div class="card flex justify-content-center">
-                <p-multiSelect id="NationalitateSelect" [options]="cities" [(ngModel)]="selectedCities"
-                    optionLabel="name" placeholder="Select Cities" />
+                <p-multiSelect id="NationalitateSelect" [options]="nationalitati" [(ngModel)]="selectedNationalitati"
+                    optionLabel="numeNationalitate" placeholder="Nationalitate" />
             </div>
 
         </div>
     </section>
     <hr>
     <section class="card-section">
-        <p-card *ngFor="let card of cards" class="bookCards" header="Book Title" subheader="Author">
+        <p-card *ngFor="let card of cards" class="bookCards" [header]="card.header">
             <ng-template pTemplate="header">
                 <img alt="Card" class="CardImg" src="assets/header.jpeg" />
             </ng-template>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            </p>
+            <ng-template pTemplate="subheader">
+                <p class="author-list">{{ card.subheader }}</p>
+            </ng-template>
             <ng-template pTemplate="footer">
-
+                <p>{{ card.footer }}</p>
             </ng-template>
         </p-card>
     </section>

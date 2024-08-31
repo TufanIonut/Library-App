@@ -32,8 +32,10 @@ body {
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
+
+
 
 .search-section {
     padding: 20px;
@@ -61,16 +63,13 @@ hr {
 .bookCards {
     width: 100%;
     max-width: 300px;
+    max-height: 500px;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: #fff;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.4s ease;
 }
 
-.bookCards:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
 
 .bookCards img {
     width: 100%;
@@ -94,4 +93,9 @@ hr {
 
 #NationalitateSelect {
     width: 250px;
+}
+
+
+.author-list {
+    max-height: 30px;
 }

@@ -11,14 +11,15 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { AppServiceService } from '../../../_core/app-service.service';
+import { Nationalitaty } from '../../../Models/Nationality';
+
+import { SelectButtonModule } from 'primeng/selectbutton';
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
   query: string;
 }
-interface City {
-  name: string;
-  code: string;
-}
+
 @Component({
   selector: 'app-utilizator',
   standalone: true,
@@ -33,16 +34,17 @@ interface City {
     IconFieldModule,
     InputIconModule,
     InputTextModule,
-    MultiSelectModule
+    MultiSelectModule,
+    SelectButtonModule
 
   ],
   templateUrl: './utilizator.component.html',
   styleUrl: './utilizator.component.scss'
 })
 export class UtilizatorComponent implements OnInit {
-  selectedCities!: City[];
+  selectedNationalitati!: Nationalitaty[];
   cards: any[] = [];
-  constructor(private router: Router) {
+  constructor(private router: Router, private service: AppServiceService) {
     this.cards = [
       {
         header: 'Card 1',
@@ -101,19 +103,38 @@ export class UtilizatorComponent implements OnInit {
 
   suggestions: any[] | undefined;
 
-  cities: City[] | undefined;
+  nationalitati: Nationalitaty[] | undefined;
 
-  selectedCity: City | undefined;
+  selectedNationalitate: Nationalitaty | undefined;
+  stateOptions: any[] = [{ label: 'One-Way', value: 'one-way' }, { label: 'Return', value: 'return' }];
 
+  value: string = 'off';
   ngOnInit() {
-    this.cities = [
-      { name: 'New York', code: 'NY' },
-      { name: 'Rome', code: 'RM' },
-      { name: 'London', code: 'LDN' },
-      { name: 'Istanbul', code: 'IST' },
-      { name: 'Paris', code: 'PRS' }
-    ];
+
+    this.service.getNationalities().subscribe({
+      next: (response) => {
+
+        this.nationalitati = response;
+        console.log(this.nationalitati);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+
+    this.service.getBooks().subscribe((data: any) => {
+      this.cards = data.map((book: any) => {
+        return {
+          header: book.titlu,
+          subheader: `Authors: ${book.authors}`,
+          footer: `ISBN: ${book.isbn}`,
+          imageSrc: 'assets/book.jpeg',
+        };
+      });
+      console.log(data);
+    });
   }
+
   search(event: AutoCompleteCompleteEvent) {
     this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
   }

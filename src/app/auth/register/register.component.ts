@@ -7,6 +7,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AppServiceService } from '../../../_core/app-service.service';
 
 @Component({
   selector: 'app-register',
@@ -19,8 +20,6 @@ import { CommonModule } from '@angular/common';
     FloatLabelModule,
     PasswordModule,
     CommonModule,
-
-
   ],
 
   templateUrl: './register.component.html',
@@ -30,24 +29,24 @@ export class RegisterComponent {
   email: any;
   password: any;
   confirmPassword: any;
-  successMessage: string | null = null;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private service: AppServiceService) { }
   register() {
     if (this.email && this.password && this.confirmPassword && this.password === this.confirmPassword) {
       const payload = {
         email: this.email,
         password: this.password
       };
-      this.successMessage = 'Registration successful!';
-      setTimeout(() => {
-        this.successMessage = null;
-      }, 3000);
+      this.service.register(payload).subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      })
       this.router.navigate(['/auth/login']);
     } else {
-      this.successMessage = 'User Already Registred!';
-      setTimeout(() => {
-        this.successMessage = null;
-      }, 3000);
+
     }
   }
 

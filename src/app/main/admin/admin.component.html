@@ -12,17 +12,24 @@
     <div *ngIf="activeItem?.label === 'Autori'" class="AddAuthorSection">
         <div class="card flex justify-content-center">
             <p-button class="AddAuthBut" (onClick)="showDialogAutor()" label="Adauga Autor Nou" />
-            <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visibleAutor" [style]="{ width: '25rem' }">
-                <span class="p-text-secondary block mb-5">Update your information.</span>
-                <div class="flex align-items-center gap-3 mb-3">
-                    <label for="username" class="font-semibold w-6rem">Username</label>
-                    <input pInputText id="username" class="flex-auto" autocomplete="off" />
+
+            <p-dialog class="AddModal" header="Adauga Autor" [modal]="true" [(visible)]="visibleAutor"
+                [style]="{ width: '25rem' ,height:'30rem' }">
+                <div class="flex align-items-center gap-3 mb-3" id="marginBottom">
+                    <label for="username" class="font-semibold w-6rem" style="margin-left: 22px;">Nume</label>
+                    <input pInputText id="NumeAutor" class="flex-auto" autocomplete="off" style="margin-left: 20px;" />
                 </div>
-                <div class="flex align-items-center gap-3 mb-5">
-                    <label for="email" class="font-semibold w-6rem">Email</label>
-                    <input pInputText id="email" class="flex-auto" autocomplete="off" />
+                <div class="flex align-items-center gap-3 mb-3" id="marginBottom">
+                    <label for="username" class="font-semibold w-6rem">Prenume</label>
+                    <input pInputText id="PrenumeAutor" class="flex-auto" autocomplete="off"
+                        style="margin-left: 20px;" />
                 </div>
-                <div class="flex justify-content-end gap-2">
+                <p-floatLabel>
+                    <p-cascadeSelect inputId="cs-city" [(ngModel)]="selectedCountry" [options]="countries"
+                        optionLabel="countries" optionGroupLabel="countries" [optionGroupChildren]="['states']"
+                        [style]="{ minWidth: '16rem' }" placeholder="Nationalitate" />
+                </p-floatLabel>
+                <div id="buttonsProfileEdit">
                     <p-button label="Cancel" severity="secondary" (onClick)="visibleAutor = false" />
                     <p-button label="Save" (onClick)="visibleAutor = false" />
                 </div>
@@ -43,18 +50,18 @@
     <div *ngIf="activeItem?.label === 'Carti'" class="AddBookSection">
         <div class="AddBookSection">
             <p-button class="AddAuthBut" (onClick)="showDialogBook()" label="Adauga Carte Noua" />
-            <p-dialog class="AddModal" header="Edit Profile" [modal]="true" [(visible)]="visibleBook"
-                [style]="{ width: '25rem' }">
-                <span class="p-text-secondary block mb-5">Update your information.</span>
-                <div class="flex align-items-center gap-3 mb-3">
-                    <label for="username" class="font-semibold w-6rem">Username</label>
+            <p-dialog header="Adauga Carte" [modal]="true" [(visible)]="visibleBook"
+                [style]="{ width: '25rem',height:'25srem' }">
+                <div class="flex align-items-center gap-3 mb-3" id="marginBottom">
+                    <label for="username" class="font-semibold w-6rem">Titlu</label>
                     <input pInputText id="username" class="flex-auto" autocomplete="off" />
                 </div>
-                <div class="flex align-items-center gap-3 mb-5">
-                    <label for="email" class="font-semibold w-6rem">Email</label>
-                    <input pInputText id="email" class="flex-auto" autocomplete="off" />
+                <div class="flex align-items-center gap-3 mb-5" id="marginBottom">
+                    <label for="text" class="font-semibold w-6rem">Autor</label>
+                    <p-multiSelect id="AutoriSelect" [options]="nationalitati" [(ngModel)]="selectedNationalitati"
+                        optionLabel="numeNationalitate" placeholder="Autori" [style]="{ minWidth: '16rem' }" />
                 </div>
-                <div class="flex justify-content-end gap-2">
+                <div id="buttonsProfileEdit">
                     <p-button label="Cancel" severity="secondary" (onClick)="visibleBook = false" />
                     <p-button label="Save" (onClick)="visibleBook = false" />
                 </div>
@@ -70,7 +77,7 @@
                         <p class="author-list">{{ card.subheader }}</p>
                     </ng-template>
                     <ng-template pTemplate="footer">
-                        <p>{{ card.footer }}</p> <!-- Use card.footer instead of card.isbn -->
+                        <p>{{ card.footer }}</p>
                     </ng-template>
                 </p-card>
             </section>

@@ -13,7 +13,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { Author } from '../../../Models/Author';
 import { AppServiceService } from '../../../_core/app-service.service';
-
+import { AvatarModule } from 'primeng/avatar';
+import { Nationalitaty } from '../../../Models/Nationality';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { FloatLabelModule } from 'primeng/floatlabel';
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -27,7 +31,11 @@ import { AppServiceService } from '../../../_core/app-service.service';
     TabMenuModule,
     DialogModule,
     InputTextModule,
-    CommonModule
+    CommonModule,
+    AvatarModule,
+    MultiSelectModule,
+    CascadeSelectModule,
+    FloatLabelModule
 
   ],
   templateUrl: './admin.component.html',
@@ -35,14 +43,18 @@ import { AppServiceService } from '../../../_core/app-service.service';
 })
 export class AdminComponent implements OnInit {
   constructor(private router: Router, private appService: AppServiceService) {
-
-
-
   }
   items: MenuItem[] | undefined;
   Authorcards: any[] = [];
   BookCards: any[] = [];
   activeItem: MenuItem | undefined;
+  nationalitati: Nationalitaty[] | undefined;
+  selectedNationalitati!: Nationalitaty[];
+  selectedNationalitate: Nationalitaty | undefined;
+
+  countries: any[] | undefined;
+
+  selectedCountry: any;
   ngOnInit() {
     this.items = [
       { label: 'Autori', icon: 'pi pi-pen-to-square' },
@@ -50,9 +62,19 @@ export class AdminComponent implements OnInit {
       { label: 'Utilizator', icon: 'pi pi-users' },
 
     ];
-
     this.activeItem = this.items[0];
     console.log(this.items);
+
+    this.appService.getNationalities().subscribe({
+      next: (response) => {
+        this.countries = response;
+        console.log(this.countries);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+
     this.appService.getAuthors().subscribe((data: any) => {
       this.Authorcards = data.map((author: any) => {
         return {

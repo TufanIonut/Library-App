@@ -6,7 +6,7 @@
                 <input pInputText id="username" [(ngModel)]="email" name="email" #emailInput="ngModel" required email />
                 <label for="username">Email</label>
                 <p *ngIf="emailInput.invalid && emailInput.touched" class="error-message">
-                    Please enter a valid email address.
+
                 </p>
             </p-floatLabel>
             <p-floatLabel>
