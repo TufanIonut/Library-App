@@ -6,38 +6,74 @@
         </div>
     </header>
     <div class="card">
-        <p-tabMenu [model]="items" />
+        <p-tabMenu class="menuItems" [model]="items" [(activeItem)]="activeItem"
+            (activeItemChange)="onActiveItemChange($event)" />
+    </div>
+    <div *ngIf="activeItem?.label === 'Autori'" class="AddAuthorSection">
+        <div class="card flex justify-content-center">
+            <p-button class="AddAuthBut" (onClick)="showDialogAutor()" label="Adauga Autor Nou" />
+            <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visibleAutor" [style]="{ width: '25rem' }">
+                <span class="p-text-secondary block mb-5">Update your information.</span>
+                <div class="flex align-items-center gap-3 mb-3">
+                    <label for="username" class="font-semibold w-6rem">Username</label>
+                    <input pInputText id="username" class="flex-auto" autocomplete="off" />
+                </div>
+                <div class="flex align-items-center gap-3 mb-5">
+                    <label for="email" class="font-semibold w-6rem">Email</label>
+                    <input pInputText id="email" class="flex-auto" autocomplete="off" />
+                </div>
+                <div class="flex justify-content-end gap-2">
+                    <p-button label="Cancel" severity="secondary" (onClick)="visibleAutor = false" />
+                    <p-button label="Save" (onClick)="visibleAutor = false" />
+                </div>
+            </p-dialog>
+        </div>
+        <div class="AuthorsSection">
+            <section class="card-section">
+                <p-card *ngFor="let card of Authorcards" class="authorCards" [header]="card.header"
+                    [subheader]="card.subheader">
+                    <ng-template pTemplate="header">
+                        <img alt="Card" class="CardImg" [src]="card.imageSrc" />
+                    </ng-template>
+                </p-card>
+            </section>
+        </div>
     </div>
 
-    <div class="AddAuthorSection">
-        <p-button class="AddAuthBut" (onClick)="showDialog()" label="Adauga Autor Nou" />
-        <div class="modal-overlay" *ngIf="showModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Adauga un autor nou</h3>
-                    <button (click)="showModal = false" class="close-btn">&times;</button>
+    <div *ngIf="activeItem?.label === 'Carti'" class="AddBookSection">
+        <div class="AddBookSection">
+            <p-button class="AddAuthBut" (onClick)="showDialogBook()" label="Adauga Carte Noua" />
+            <p-dialog class="AddModal" header="Edit Profile" [modal]="true" [(visible)]="visibleBook"
+                [style]="{ width: '25rem' }">
+                <span class="p-text-secondary block mb-5">Update your information.</span>
+                <div class="flex align-items-center gap-3 mb-3">
+                    <label for="username" class="font-semibold w-6rem">Username</label>
+                    <input pInputText id="username" class="flex-auto" autocomplete="off" />
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Nume</label>
-                        <input id="name" [(ngModel)]="author.firstName" placeholder="Introduceti numele" />
-                    </div>
-                    <div class="form-group">
-                        <label for="surname">Prenume</label>
-                        <input id="surname" [(ngModel)]="author.lastName" placeholder="Introduceti prenumele" />
-                    </div>
-                    <div class="form-group">
-                        <label for="nationality">Naționalitate</label>
-                        <select id="nationality" [(ngModel)]="author.nationality">
-                            <option *ngFor="let nat of nationalities" [value]="nat.value">{{ nat.label }}</option>
-                        </select>
-                    </div>
+                <div class="flex align-items-center gap-3 mb-5">
+                    <label for="email" class="font-semibold w-6rem">Email</label>
+                    <input pInputText id="email" class="flex-auto" autocomplete="off" />
                 </div>
-                <div class="modal-footer">
-                    <button (click)="addAuthor()" class="add-btn">Adauga</button>
-                    <button (click)="showModal = false" class="cancel-btn">Anulează</button>
+                <div class="flex justify-content-end gap-2">
+                    <p-button label="Cancel" severity="secondary" (onClick)="visibleBook = false" />
+                    <p-button label="Save" (onClick)="visibleBook = false" />
                 </div>
-            </div>
+            </p-dialog>
+        </div>
+        <div class="BooksSection">
+            <section class="card-section">
+                <p-card *ngFor="let card of BookCards" class="bookCards" [header]="card.header">
+                    <ng-template pTemplate="header">
+                        <img alt="Card" class="CardImg" src="assets/header.jpeg" />
+                    </ng-template>
+                    <ng-template pTemplate="subheader">
+                        <p class="author-list">{{ card.subheader }}</p>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <p>{{ card.footer }}</p> <!-- Use card.footer instead of card.isbn -->
+                    </ng-template>
+                </p-card>
+            </section>
         </div>
     </div>
 </body>

@@ -1,22 +1,24 @@
 <body>
+
     <div class="header">
         <h1 class="title">Digital Library</h1>
         <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (click)="logout()" />
     </div>
     <section class="search-section">
-        <p-autoComplete id="searchBar" [(ngModel)]="selectedItem" placeholder="Titlu carte"
-            (completeMethod)="search($event)" />
-        <p-autoComplete id="searchBar" [(ngModel)]="selectedItem" placeholder="Nume Autor"
-            (completeMethod)="search($event)" />
+        <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Cautare Titlu" />
+        </p-iconField>
+        <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Cautare Autor" />
+        </p-iconField>
         <div class="IsbnNat">
-
             <p-inputOtp id="ISBN" [(ngModel)]="CodeValue" [integerOnly]="true" [length]="13" />
-            <select name="cars" id="cars">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
-            </select>
+            <div class="card flex justify-content-center">
+                <p-multiSelect id="NationalitateSelect" [options]="cities" [(ngModel)]="selectedCities"
+                    optionLabel="name" placeholder="Select Cities" />
+            </div>
 
         </div>
     </section>

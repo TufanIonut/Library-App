@@ -1,21 +1,40 @@
 <body>
-    <div class="Logincard">
-        <p class="loginTitle">Digital Library</p>
-        <p-floatLabel>
-            <input pInputText id="username" [(ngModel)]="email" />
-            <label for="username">Email</label>
-        </p-floatLabel>
-        <p-floatLabel>
-            <p-password [(ngModel)]="password" [feedback]="false" />
-            <label for="password">Password</label>
-        </p-floatLabel>
-        <p-floatLabel>
-            <p-password [(ngModel)]="confirmPasword" [feedback]="false" />
-            <label for="password">Confirm Password</label>
-        </p-floatLabel>
-        <p-button id="loginButon" label="Register" />
-        <p class="register-link">
-            Already a user? <a class="link" href="auth/login">Click to Login</a>
-        </p>
+    <div>
+        <form #registerForm="ngForm" class="Logincard" (ngSubmit)="register()">
+            <p class="loginTitle">Digital Library</p>
+            <p-floatLabel>
+                <input pInputText id="email" [(ngModel)]="email" name="email" #emailInput="ngModel" required email />
+                <label for="email">Email</label>
+                <p *ngIf="emailInput.invalid && emailInput.touched" class="error-message">
+                </p>
+            </p-floatLabel>
+            <p-floatLabel>
+                <p-password [(ngModel)]="password" name="password" #passwordInput="ngModel" required
+                    [feedback]="false" />
+                <label for="password">Password</label>
+                <p *ngIf="passwordInput.invalid && passwordInput.touched" class="error-message">
+
+                </p>
+            </p-floatLabel>
+            <p-floatLabel>
+                <p-password [(ngModel)]="confirmPassword" name="confirmPassword" #confirmPasswordInput="ngModel"
+                    required [feedback]="false" />
+                <label for="confirmPassword">Confirm Password</label>
+                <p *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched" class="error-message">
+                </p>
+                <p *ngIf="password !== confirmPassword && confirmPasswordInput.touched" class="error-message">
+                    Passwords do not match.
+                </p>
+            </p-floatLabel>
+            <p-button type="submit" id="registerButton" label="Register"
+                [disabled]="registerForm.invalid || password !== confirmPassword" />
+
+            <p class="register-link">
+                Already a user? <a class="link" href="auth/login">Click to Login</a>
+            </p>
+        </form>
+        <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+        </div>
     </div>
 </body>

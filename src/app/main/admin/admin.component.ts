@@ -11,6 +11,9 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
+import { Author } from '../../../Models/Author';
+import { AppServiceService } from '../../../_core/app-service.service';
+
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -31,44 +34,99 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin.component.scss'
 })
 export class AdminComponent implements OnInit {
-  constructor(private router: Router) {
+  constructor(private router: Router, private appService: AppServiceService) {
+
+
 
   }
   items: MenuItem[] | undefined;
-
+  Authorcards: any[] = [];
+  BookCards: any[] = [];
   activeItem: MenuItem | undefined;
-
   ngOnInit() {
     this.items = [
-      { label: 'Autori', icon: 'pi pi-users' },
+      { label: 'Autori', icon: 'pi pi-pen-to-square' },
       { label: 'Carti', icon: 'pi pi-book' },
+      { label: 'Utilizator', icon: 'pi pi-users' },
+
     ];
 
     this.activeItem = this.items[0];
     console.log(this.items);
+    this.appService.getAuthors().subscribe((data: any) => {
+      this.Authorcards = data.map((author: any) => {
+        return {
+          header: author.fullName,
+          subheader: `Nationalitate: ${author.numeNationalitate}`,
+          imageSrc: 'assets/cat.jpeg',
+        };
+      });
+      console.log(data);
+    });
+
+    this.appService.getBooks().subscribe((data: any) => {
+      this.BookCards = data.map((book: any) => {
+        return {
+          header: book.titlu,
+          subheader: `Authors: ${book.authors}`,
+          footer: `ISBN: ${book.isbn}`,
+          imageSrc: 'assets/book.jpeg',
+        };
+      });
+      console.log(data);
+    });
   }
-  showModal: boolean = false;
-  author = {
-    firstName: '',
-    lastName: '',
-    nationality: ''
+
+  author: Author = {
+    NumeAutor: '',
+    PrenumeAutor: '',
+    Nationalitate: ''
   };
   nationalities = [
     { label: 'Română', value: 'RO' },
     { label: 'Engleză', value: 'EN' },
     { label: 'Franceză', value: 'FR' }
   ];
-  showDialog() {
-    this.showModal = true;
+  books = {
+
   }
-  addAuthor() {
-    console.log(this.author);
-    this.showModal = false;
+
+  visibleAutor: boolean = false;
+  visibleBook: boolean = false;
+  showDialogAutor() {
+    this.visibleAutor = true;
+  }
+  showDialogBook() {
+    this.visibleBook = true;
   }
   onActiveItemChange(event: MenuItem) {
     this.activeItem = event;
+    console.log('Active item changed to:', this.activeItem);
+
+    if (this.activeItem.label === 'Utilizator') {
+      this.router.navigate(['/main/utilizator']);
+    }
   }
   logout() {
+    localStorage.clear();
     this.router.navigate(['auth/login']);
+  }
+
+
+
+  authors = {
+    Nationalitate: [] as string[]
+  };
+
+
+  onCheckboxChange(event: any) {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      this.authors.Nationalitate.push(value);
+    } else {
+      this.authors.Nationalitate = this.authors.Nationalitate.filter(val => val !== value);
+    }
   }
 }

@@ -7,6 +7,10 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
   query: string;
@@ -25,13 +29,18 @@ interface City {
     InputOtpModule,
     CardModule,
     ButtonModule,
-    CommonModule
+    CommonModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    MultiSelectModule
 
   ],
   templateUrl: './utilizator.component.html',
   styleUrl: './utilizator.component.scss'
 })
 export class UtilizatorComponent implements OnInit {
+  selectedCities!: City[];
   cards: any[] = [];
   constructor(private router: Router) {
     this.cards = [
@@ -109,6 +118,7 @@ export class UtilizatorComponent implements OnInit {
     this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
   }
   logout() {
+    localStorage.clear();
     this.router.navigate(['auth/login']);
   }
 }
