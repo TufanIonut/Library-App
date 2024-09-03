@@ -44,58 +44,7 @@ interface AutoCompleteCompleteEvent {
 export class UtilizatorComponent implements OnInit {
   selectedNationalitati!: Nationalitaty[];
   cards: any[] = [];
-  constructor(private router: Router, private service: AppServiceService) {
-    this.cards = [
-      {
-        header: 'Card 1',
-        subheader: 'First Card Subheader',
-        imageSrc: 'assets/book.jpeg',
-        content: 'Brief content for Card 1.'
-      },
-      {
-        header: 'Card 2',
-        subheader: 'Second Card Subheader',
-        imageSrc: 'https://primefaces.org/cdn/primeng/images/card-ng.jpg',
-        content: 'Short description for Card 2.'
-      },
-      {
-        header: 'Card 3',
-        subheader: 'Third Card Subheader',
-        imageSrc: 'https://primefaces.org/cdn/primeng/images/card-ng.jpg',
-        content: 'Quick info for Card 3.'
-      },
-      {
-        header: 'Card 4',
-        subheader: 'Fourth Card Subheader',
-        imageSrc: 'https://primefaces.org/cdn/primeng/images/card-ng.jpg',
-        content: 'Concise details for Card 4.'
-      },
-      {
-        header: 'Card 5',
-        subheader: 'Fifth Card Subheader',
-        imageSrc: 'https://primefaces.org/cdn/primeng/images/card-ng.jpg',
-        content: 'Summary text for Card 5.'
-      },
-      {
-        header: 'Card 6',
-        subheader: 'Sixth Card Subheader',
-        imageSrc: 'https://primefaces.org/cdn/primeng/images/card-ng.jpg',
-        content: 'Compact content for Card 6.'
-      },
-      {
-        header: 'Card 6',
-        subheader: 'Sixth Card Subheader',
-        imageSrc: 'https://primefaces.org/cdn/primeng/images/card-ng.jpg',
-        content: 'Compact content for Card 6.'
-      },
-      {
-        header: 'Card 6',
-        subheader: 'Sixth Card Subheader',
-        imageSrc: 'https://primefaces.org/cdn/primeng/images/card-ng.jpg',
-        content: 'Compact content for Card 6.'
-      }
-    ];
-  }
+  constructor(private router: Router, private service: AppServiceService) { }
   CodeValue: any;
   items: any[] | undefined;
 
@@ -106,8 +55,6 @@ export class UtilizatorComponent implements OnInit {
   nationalitati: Nationalitaty[] | undefined;
 
   selectedNationalitate: Nationalitaty | undefined;
-  stateOptions: any[] = [{ label: 'One-Way', value: 'one-way' }, { label: 'Return', value: 'return' }];
-
   value: string = 'off';
   ngOnInit() {
 

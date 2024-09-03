@@ -7,17 +7,17 @@
     <section class="search-section">
         <p-iconField iconPosition="left">
             <p-inputIcon styleClass="pi pi-search" />
-            <input type="text" pInputText placeholder="Cautare Titlu" />
+            <input type="text" pInputText placeholder="Cautare Titlu" [style]="{width:'350px'}" />
         </p-iconField>
         <p-iconField iconPosition="left">
             <p-inputIcon styleClass="pi pi-search" />
-            <input type="text" pInputText placeholder="Cautare Autor" />
+            <input type="text" pInputText placeholder="Cautare Autor" [style]="{width:'350px'}" />
         </p-iconField>
         <div class="IsbnNat">
             <p-inputOtp id="ISBN" [(ngModel)]="CodeValue" [integerOnly]="true" [length]="13" />
             <div class="card flex justify-content-center">
-                <p-multiSelect id="NationalitateSelect" [options]="nationalitati" [(ngModel)]="selectedNationalitati"
-                    optionLabel="numeNationalitate" placeholder="Nationalitate" />
+                <p-multiSelect [style]="{width:'300px'}" id="NationalitateSelect" [options]="nationalitati"
+                    [(ngModel)]="selectedNationalitati" optionLabel="numeNationalitate" placeholder="Nationalitate" />
             </div>
 
         </div>

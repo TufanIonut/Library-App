@@ -55,16 +55,25 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 50px;
     padding: 20px;
-    margin-top: 12px;
+    margin-top: 22px;
     margin-left: 20px;
+}
+
+.bookcard-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 75px;
+    padding: 20px;
+    margin-top: 12px;
+
 }
 
 .authorCards {
     width: 100%;
-
     max-width: 300px;
+    max-height: 300px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
     background-color: #fff;
     transition: box-shadow 0.3s ease;
 }
@@ -74,7 +83,7 @@
 }
 
 .authorCards img {
-    width: 200px;
+    width: fit-content;
     height: 150px;
     border-radius: 12px 12px 0 0;
 }
@@ -112,7 +121,7 @@
 
 
 .bookCards img {
-    max-width: 230px;
+    max-width: auto;
     height: 150px;
     border-radius: 12px 12px 0 0;
 }
@@ -138,8 +147,8 @@
 }
 
 
-#username {
-    margin-left: 10px;
+#TitluCarte {
+    margin-left: 20px;
 }
 
 #marginBottom {

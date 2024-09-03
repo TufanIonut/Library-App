@@ -17,28 +17,26 @@
                 [style]="{ width: '25rem' ,height:'30rem' }">
                 <div class="flex align-items-center gap-3 mb-3" id="marginBottom">
                     <label for="username" class="font-semibold w-6rem" style="margin-left: 22px;">Nume</label>
-                    <input pInputText id="NumeAutor" class="flex-auto" autocomplete="off" style="margin-left: 20px;" />
+                    <input pInputText id="NumeAutor" [(ngModel)]="NumeAutorTxt" class="flex-auto" autocomplete="off"
+                        style="margin-left: 20px;" />
                 </div>
                 <div class="flex align-items-center gap-3 mb-3" id="marginBottom">
                     <label for="username" class="font-semibold w-6rem">Prenume</label>
-                    <input pInputText id="PrenumeAutor" class="flex-auto" autocomplete="off"
-                        style="margin-left: 20px;" />
+                    <input pInputText id="PrenumeAutor" [(ngModel)]="PrenumeAutorTxt" class="flex-auto"
+                        autocomplete="off" style="margin-left: 20px;" />
                 </div>
-                <p-floatLabel>
-                    <p-cascadeSelect inputId="cs-city" [(ngModel)]="selectedCountry" [options]="countries"
-                        optionLabel="countries" optionGroupLabel="countries" [optionGroupChildren]="['states']"
-                        [style]="{ minWidth: '16rem' }" placeholder="Nationalitate" />
-                </p-floatLabel>
+                <p-dropdown [options]="nationalitati" [(ngModel)]="selectedNationalitate"
+                    optionLabel="numeNationalitate" placeholder="Nationalitate" />
                 <div id="buttonsProfileEdit">
                     <p-button label="Cancel" severity="secondary" (onClick)="visibleAutor = false" />
-                    <p-button label="Save" (onClick)="visibleAutor = false" />
+                    <p-button label="Adaugare" (onClick)="AddAuthor()" />
                 </div>
             </p-dialog>
         </div>
         <div class="AuthorsSection">
             <section class="card-section">
-                <p-card *ngFor="let card of Authorcards" class="authorCards" [header]="card.header"
-                    [subheader]="card.subheader">
+                <p-card [style]="{ width: '250px' ,height:'300px' }" *ngFor="let card of Authorcards"
+                    class="authorCards" [header]="card.header" [subheader]="card.subheader">
                     <ng-template pTemplate="header">
                         <img alt="Card" class="CardImg" [src]="card.imageSrc" />
                     </ng-template>
@@ -51,25 +49,26 @@
         <div class="AddBookSection">
             <p-button class="AddAuthBut" (onClick)="showDialogBook()" label="Adauga Carte Noua" />
             <p-dialog header="Adauga Carte" [modal]="true" [(visible)]="visibleBook"
-                [style]="{ width: '25rem',height:'25srem' }">
+                [style]="{ width: '25rem',height:'30rem' }">
                 <div class="flex align-items-center gap-3 mb-3" id="marginBottom">
-                    <label for="username" class="font-semibold w-6rem">Titlu</label>
-                    <input pInputText id="username" class="flex-auto" autocomplete="off" />
+                    <label for="text" class="font-semibold w-6rem">Titlu</label>
+                    <input pInputText id="TitluCarte" [(ngModel)]="TitluTxt" class="flex-auto" autocomplete="off" />
                 </div>
                 <div class="flex align-items-center gap-3 mb-5" id="marginBottom">
-                    <label for="text" class="font-semibold w-6rem">Autor</label>
-                    <p-multiSelect id="AutoriSelect" [options]="nationalitati" [(ngModel)]="selectedNationalitati"
-                        optionLabel="numeNationalitate" placeholder="Autori" [style]="{ minWidth: '16rem' }" />
+                    <label for="text" class="font-semibold w-6rem">Autori</label>
+                    <p-multiSelect id="AutoriSelect" [options]="Authors" [(ngModel)]="selectedAuthors"
+                        optionLabel="fullName" placeholder="Autor" [style]="{ minWidth: '15.5rem' }" />
                 </div>
                 <div id="buttonsProfileEdit">
-                    <p-button label="Cancel" severity="secondary" (onClick)="visibleBook = false" />
-                    <p-button label="Save" (onClick)="visibleBook = false" />
+                    <p-button label="Cancel" severity="secondary" (onClick)="this.visibleBook =false" />
+                    <p-button label="Adaugare" (onClick)="AddBook()" />
                 </div>
             </p-dialog>
         </div>
         <div class="BooksSection">
-            <section class="card-section">
-                <p-card *ngFor="let card of BookCards" class="bookCards" [header]="card.header">
+            <section class="bookcard-section ">
+                <p-card [style]="{ width: '260px' ,height:'400px' }" *ngFor="let card of BookCards" class="bookCards"
+                    [header]="card.header">
                     <ng-template pTemplate="header">
                         <img alt="Card" class="CardImg" src="assets/header.jpeg" />
                     </ng-template>

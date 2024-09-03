@@ -45,17 +45,20 @@ export class AdminComponent implements OnInit {
   constructor(private router: Router, private appService: AppServiceService) {
   }
   items: MenuItem[] | undefined;
-  Authorcards: any[] = [];
+
   BookCards: any[] = [];
+  TitluTxt: any;
   activeItem: MenuItem | undefined;
   nationalitati: Nationalitaty[] | undefined;
-  selectedNationalitati!: Nationalitaty[];
   selectedNationalitate: Nationalitaty | undefined;
-
-  countries: any[] | undefined;
-
-  selectedCountry: any;
+  isbn: number | undefined;
+  Authorcards: any[] = [];
+  Authors: Author[] | undefined;
+  selectedAuthors: Author[] | undefined;
+  NumeAutorTxt: any;
+  PrenumeAutorTxt: any;
   ngOnInit() {
+    this.checkAdmin();
     this.items = [
       { label: 'Autori', icon: 'pi pi-pen-to-square' },
       { label: 'Carti', icon: 'pi pi-book' },
@@ -63,12 +66,10 @@ export class AdminComponent implements OnInit {
 
     ];
     this.activeItem = this.items[0];
-    console.log(this.items);
-
     this.appService.getNationalities().subscribe({
       next: (response) => {
-        this.countries = response;
-        console.log(this.countries);
+        this.nationalitati = response;
+        console.log(this.nationalitati);
       },
       error: (error) => {
         console.log(error);
@@ -83,9 +84,16 @@ export class AdminComponent implements OnInit {
           imageSrc: 'assets/cat.jpeg',
         };
       });
-      console.log(data);
     });
-
+    this.appService.getAuthors().subscribe({
+      next: (response) => {
+        this.Authors = response;
+        console.log(this.Authors);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
     this.appService.getBooks().subscribe((data: any) => {
       this.BookCards = data.map((book: any) => {
         return {
@@ -97,21 +105,18 @@ export class AdminComponent implements OnInit {
       });
       console.log(data);
     });
+
+
   }
 
   author: Author = {
+    idAutor: 0,
     NumeAutor: '',
     PrenumeAutor: '',
-    Nationalitate: ''
+    Nationalitate: '',
+    codNationalitate: ''
   };
-  nationalities = [
-    { label: 'Română', value: 'RO' },
-    { label: 'Engleză', value: 'EN' },
-    { label: 'Franceză', value: 'FR' }
-  ];
-  books = {
 
-  }
 
   visibleAutor: boolean = false;
   visibleBook: boolean = false;
@@ -123,32 +128,70 @@ export class AdminComponent implements OnInit {
   }
   onActiveItemChange(event: MenuItem) {
     this.activeItem = event;
-    console.log('Active item changed to:', this.activeItem);
 
     if (this.activeItem.label === 'Utilizator') {
       this.router.navigate(['/main/utilizator']);
     }
   }
+  AddBook() {
+    console.log(this.selectedAuthors);
+    this.visibleBook = false;
+    if (this.selectedAuthors && this.selectedAuthors.length > 0) {
+      const firstAuthorNationalityCode = String(this.selectedAuthors[0].codNationalitate);
+      let idArray: number[] = [];
+
+      this.selectedAuthors.forEach(author => {
+        idArray.push(author.idAutor);
+      });
+      const authorIds = idArray.join(';');
+
+      const payload = {
+        authorCode: firstAuthorNationalityCode,
+        titlu: this.TitluTxt,
+        idAuthors: authorIds
+      };
+      console.log(payload);
+      this.appService.addBook(payload).subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    }
+  }
+
+  AddAuthor() {
+    this.visibleAutor = false;
+    const payload = {
+      nume: this.NumeAutorTxt,
+      prenume: this.PrenumeAutorTxt,
+      idNationalitate: this.selectedNationalitate?.idNationalitate
+    };
+    this.appService.addAuthor(payload).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+
+    console.log(payload);
+  }
+  checkAdmin() {
+    this.appService.checkAdmin().subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
   logout() {
     localStorage.clear();
     this.router.navigate(['auth/login']);
-  }
-
-
-
-  authors = {
-    Nationalitate: [] as string[]
-  };
-
-
-  onCheckboxChange(event: any) {
-    const value = event.target.value;
-    const isChecked = event.target.checked;
-
-    if (isChecked) {
-      this.authors.Nationalitate.push(value);
-    } else {
-      this.authors.Nationalitate = this.authors.Nationalitate.filter(val => val !== value);
-    }
   }
 }
