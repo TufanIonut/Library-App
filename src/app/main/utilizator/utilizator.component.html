@@ -25,6 +25,10 @@
             </div>
         </div>
     </section>
+
+    <p-tabMenu class="menuItems" [model]="Menuitems" [(activeItem)]="activeItem"
+        (activeItemChange)="onActiveItemChange($event)" />
+
     <hr>
     <section class="card-section">
         <p-card *ngFor="let card of filteredCards" class="bookCards" [header]="card.header">

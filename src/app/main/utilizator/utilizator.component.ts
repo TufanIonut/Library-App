@@ -13,7 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AppServiceService } from '../../../_core/app-service.service';
 import { Nationalitaty } from '../../../Models/Nationality';
-
+import { MenuItem } from 'primeng/api';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
@@ -31,12 +32,17 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     InputIconModule,
     InputTextModule,
     MultiSelectModule,
-    SelectButtonModule
+    SelectButtonModule,
+    TabMenuModule,
+
   ],
   templateUrl: './utilizator.component.html',
   styleUrls: ['./utilizator.component.scss']
 })
 export class UtilizatorComponent implements OnInit {
+  Menuitems: MenuItem[] | undefined;
+  activeItem: MenuItem | undefined;
+
   selectedNationalitati!: Nationalitaty[];
   cards: any[] = [];
   filteredCards: any[] = [];
@@ -54,6 +60,14 @@ export class UtilizatorComponent implements OnInit {
   constructor(private router: Router, private service: AppServiceService) { }
 
   ngOnInit() {
+    this.items = [
+      { label: 'Autori', icon: 'pi pi-pen-to-square' },
+      { label: 'Carti', icon: 'pi pi-book' },
+      { label: 'Utilizator', icon: 'pi pi-users' },
+    ];
+    this.activeItem = this.items[0];
+
+
     this.service.getNationalities().subscribe({
       next: (response) => {
         this.nationalitati = response;
@@ -87,6 +101,12 @@ export class UtilizatorComponent implements OnInit {
   }
   BecomeAdmin() {
 
+  }
+  onActiveItemChange(event: MenuItem) {
+    this.activeItem = event;
+    if (this.activeItem.label === 'Utilizator') {
+      this.router.navigate(['/main/utilizator']);
+    }
   }
   logout() {
     localStorage.clear();
