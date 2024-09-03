@@ -15,10 +15,6 @@ import { AppServiceService } from '../../../_core/app-service.service';
 import { Nationalitaty } from '../../../Models/Nationality';
 
 import { SelectButtonModule } from 'primeng/selectbutton';
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
 
 @Component({
   selector: 'app-utilizator',
@@ -36,31 +32,30 @@ interface AutoCompleteCompleteEvent {
     InputTextModule,
     MultiSelectModule,
     SelectButtonModule
-
   ],
   templateUrl: './utilizator.component.html',
-  styleUrl: './utilizator.component.scss'
+  styleUrls: ['./utilizator.component.scss']
 })
 export class UtilizatorComponent implements OnInit {
   selectedNationalitati!: Nationalitaty[];
   cards: any[] = [];
-  constructor(private router: Router, private service: AppServiceService) { }
+  filteredCards: any[] = [];
+  searchTitle: string = '';
+  searchAuthor: string = '';
+  searchISBN: string = '';
   CodeValue: any;
   items: any[] | undefined;
-
   selectedItem: any;
-
   suggestions: any[] | undefined;
-
   nationalitati: Nationalitaty[] | undefined;
-
   selectedNationalitate: Nationalitaty | undefined;
   value: string = 'off';
-  ngOnInit() {
 
+  constructor(private router: Router, private service: AppServiceService) { }
+
+  ngOnInit() {
     this.service.getNationalities().subscribe({
       next: (response) => {
-
         this.nationalitati = response;
         console.log(this.nationalitati);
       },
@@ -78,12 +73,17 @@ export class UtilizatorComponent implements OnInit {
           imageSrc: 'assets/book.jpeg',
         };
       });
+      this.filteredCards = [...this.cards];
       console.log(data);
     });
   }
-
-  search(event: AutoCompleteCompleteEvent) {
-    this.suggestions = [...Array(10).keys()].map(item => event.query + '-' + item);
+  filterBooks() {
+    this.filteredCards = this.cards.filter(card => {
+      const matchesTitle = card.header.toLowerCase().includes(this.searchTitle.toLowerCase());
+      const matchesAuthor = card.subheader.toLowerCase().includes(this.searchAuthor.toLowerCase());
+      const matchesISBN = card.footer.includes(`ISBN: ${this.searchISBN}`);
+      return matchesTitle && matchesAuthor && matchesISBN;
+    });
   }
   logout() {
     localStorage.clear();

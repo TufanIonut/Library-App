@@ -1,5 +1,4 @@
 <body>
-
     <div class="header">
         <h1 class="title">Digital Library</h1>
         <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (click)="logout()" />
@@ -7,24 +6,25 @@
     <section class="search-section">
         <p-iconField iconPosition="left">
             <p-inputIcon styleClass="pi pi-search" />
-            <input type="text" pInputText placeholder="Cautare Titlu" [style]="{width:'350px'}" />
+            <input type="text" pInputText placeholder="Cautare Titlu" [style]="{width:'350px'}"
+                [(ngModel)]="searchTitle" (input)="filterBooks()" />
         </p-iconField>
         <p-iconField iconPosition="left">
             <p-inputIcon styleClass="pi pi-search" />
-            <input type="text" pInputText placeholder="Cautare Autor" [style]="{width:'350px'}" />
+            <input type="text" pInputText placeholder="Cautare Autor" [style]="{width:'350px'}"
+                [(ngModel)]="searchAuthor" (input)="filterBooks()" />
         </p-iconField>
         <div class="IsbnNat">
-            <p-inputOtp id="ISBN" [(ngModel)]="CodeValue" [integerOnly]="true" [length]="13" />
+            <p-inputOtp id="ISBN" [(ngModel)]="searchISBN" (input)="filterBooks()" [integerOnly]="true" [length]="13" />
             <div class="card flex justify-content-center">
                 <p-multiSelect [style]="{width:'300px'}" id="NationalitateSelect" [options]="nationalitati"
                     [(ngModel)]="selectedNationalitati" optionLabel="numeNationalitate" placeholder="Nationalitate" />
             </div>
-
         </div>
     </section>
     <hr>
     <section class="card-section">
-        <p-card *ngFor="let card of cards" class="bookCards" [header]="card.header">
+        <p-card *ngFor="let card of filteredCards" class="bookCards" [header]="card.header">
             <ng-template pTemplate="header">
                 <img alt="Card" class="CardImg" src="assets/header.jpeg" />
             </ng-template>
