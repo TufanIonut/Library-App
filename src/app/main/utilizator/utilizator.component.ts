@@ -85,6 +85,9 @@ export class UtilizatorComponent implements OnInit {
       return matchesTitle && matchesAuthor && matchesISBN;
     });
   }
+  BecomeAdmin() {
+
+  }
   logout() {
     localStorage.clear();
     this.router.navigate(['auth/login']);

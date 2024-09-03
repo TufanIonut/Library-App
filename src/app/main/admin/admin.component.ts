@@ -45,7 +45,6 @@ export class AdminComponent implements OnInit {
   constructor(private router: Router, private appService: AppServiceService) {
   }
   items: MenuItem[] | undefined;
-
   BookCards: any[] = [];
   TitluTxt: any;
   activeItem: MenuItem | undefined;
@@ -63,52 +62,13 @@ export class AdminComponent implements OnInit {
       { label: 'Autori', icon: 'pi pi-pen-to-square' },
       { label: 'Carti', icon: 'pi pi-book' },
       { label: 'Utilizator', icon: 'pi pi-users' },
-
     ];
     this.activeItem = this.items[0];
-    this.appService.getNationalities().subscribe({
-      next: (response) => {
-        this.nationalitati = response;
-        console.log(this.nationalitati);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
-
-    this.appService.getAuthors().subscribe((data: any) => {
-      this.Authorcards = data.map((author: any) => {
-        return {
-          header: author.fullName,
-          subheader: `Nationalitate: ${author.numeNationalitate}`,
-          imageSrc: 'assets/cat.jpeg',
-        };
-      });
-    });
-    this.appService.getAuthors().subscribe({
-      next: (response) => {
-        this.Authors = response;
-        console.log(this.Authors);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    })
-    this.appService.getBooks().subscribe((data: any) => {
-      this.BookCards = data.map((book: any) => {
-        return {
-          header: book.titlu,
-          subheader: `Authors: ${book.authors}`,
-          footer: `ISBN: ${book.isbn}`,
-          imageSrc: 'assets/book.jpeg',
-        };
-      });
-      console.log(data);
-    });
-
-
+    this.getNationalities();
+    this.getAuthorsForCards();
+    this.getAuthors();
+    this.getBooks();
   }
-
   author: Author = {
     idAutor: 0,
     NumeAutor: '',
@@ -116,7 +76,6 @@ export class AdminComponent implements OnInit {
     Nationalitate: '',
     codNationalitate: ''
   };
-
 
   visibleAutor: boolean = false;
   visibleBook: boolean = false;
@@ -128,11 +87,11 @@ export class AdminComponent implements OnInit {
   }
   onActiveItemChange(event: MenuItem) {
     this.activeItem = event;
-
     if (this.activeItem.label === 'Utilizator') {
       this.router.navigate(['/main/utilizator']);
     }
   }
+  //---------------------------------ADD BOOK
   AddBook() {
     console.log(this.selectedAuthors);
     this.visibleBook = false;
@@ -162,6 +121,7 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  //---------------------------------ADD AUTHOR
   AddAuthor() {
     this.visibleAutor = false;
     const payload = {
@@ -180,6 +140,56 @@ export class AdminComponent implements OnInit {
 
     console.log(payload);
   }
+  //------------------------------------------------------
+  //-------------------------------------GETs-------------
+  getNationalities() {
+    this.appService.getNationalities().subscribe({
+      next: (response) => {
+        this.nationalitati = response;
+        console.log(this.nationalitati);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  getAuthors() {
+    this.appService.getAuthors().subscribe({
+      next: (response) => {
+        this.Authors = response;
+        console.log(this.Authors);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+  getAuthorsForCards() {
+    this.appService.getAuthors().subscribe((data: any) => {
+      this.Authorcards = data.map((author: any) => {
+        return {
+          header: author.fullName,
+          subheader: `Nationalitate: ${author.numeNationalitate}`,
+          imageSrc: 'assets/cat.jpeg',
+        };
+      });
+    });
+  }
+  getBooks() {
+    this.appService.getBooks().subscribe((data: any) => {
+      this.BookCards = data.map((book: any) => {
+        return {
+          header: book.titlu,
+          subheader: `Authors: ${book.authors}`,
+          footer: `ISBN: ${book.isbn}`,
+          imageSrc: 'assets/book.jpeg',
+        };
+      });
+      console.log(data);
+    });
+  }
+  //---------------------------------------------------------
   checkAdmin() {
     this.appService.checkAdmin().subscribe({
       next: (response) => {

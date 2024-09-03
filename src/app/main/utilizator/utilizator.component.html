@@ -1,7 +1,10 @@
 <body>
     <div class="header">
-        <h1 class="title">Digital Library</h1>
-        <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (click)="logout()" />
+        <div>
+            <h1 class="title">Digital Library</h1>
+            <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (click)="logout()" />
+        </div>
+        <p-button id="AdmimButon" label="Request Admin" (onClick)="BecomeAdmin()" />
     </div>
     <section class="search-section">
         <p-iconField iconPosition="left">
