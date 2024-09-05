@@ -8,7 +8,9 @@ import { PasswordModule } from 'primeng/password';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AppServiceService } from '../../../_core/app-service.service';
-
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -20,8 +22,11 @@ import { AppServiceService } from '../../../_core/app-service.service';
     FloatLabelModule,
     PasswordModule,
     CommonModule,
-  ],
+    ToastModule,
+    RippleModule
 
+  ],
+  providers: [MessageService],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -29,7 +34,7 @@ export class RegisterComponent {
   email: any;
   password: any;
   confirmPassword: any;
-  constructor(private router: Router, private service: AppServiceService) { }
+  constructor(private router: Router, private service: AppServiceService, private messageService: MessageService) { }
   register() {
     if (this.email && this.password && this.confirmPassword && this.password === this.confirmPassword) {
       const payload = {
@@ -39,15 +44,23 @@ export class RegisterComponent {
       this.service.register(payload).subscribe({
         next: (response) => {
           console.log(response);
+          this.showRegisterSuccess();
+          setTimeout(() => {
+            this.router.navigate(['/auth/login']);
+          }, 1000);
         },
         error: (error) => {
+          this.showRegisterError();
           console.log(error);
         }
       })
-      this.router.navigate(['/auth/login']);
-    } else {
 
     }
   }
-
+  showRegisterSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Inregistrat cu success' });
+  }
+  showRegisterError() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Utilizator deja existent' });
+  }
 }

@@ -1,10 +1,34 @@
 <body>
+    <p-sidebar [(visible)]="sidebarVisible" [style]="{width:'500px'}">
+        <ng-template pTemplate="header">
+            <span class="siderTitle">Favorite Books</span>
+        </ng-template>
+
+        <section>
+            <p-card *ngFor="let card of filteredCards" class="favoritebookCards">
+                <ng-template pTemplate="footer">
+                    <div style="display: flex; align-items: center; gap:15px">
+                        <img alt="Card" class="favoriteCardImg" src="assets/header.jpeg" />
+                        <div style="display:flex ;flex-direction:row; align-items:center;gap:55px">
+                            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+                                <p style="margin: 0; font-weight: bold;">{{ card.header }}</p>
+                                <p style="margin: 0;">{{ card.subheader }}</p>
+                            </div>
+                            <p-button
+                                [style]="{'background-color':'none','border':'none', 'max-width':'25px','max-height':'25px'}"
+                                icon="pi pi-heart" />
+                        </div>
+                    </div>
+                </ng-template>
+            </p-card>
+        </section>
+    </p-sidebar>
     <div class="header">
         <div>
             <h1 class="title">Digital Library</h1>
             <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (click)="logout()" />
         </div>
-        <p-button id="AdmimButon" label="Request Admin" (onClick)="BecomeAdmin()" />
+        <p-button [style]="{'margin-right' :'10px'}" id="AdmimButon" label="Request Admin" (onClick)="BecomeAdmin()" />
     </div>
     <section class="search-section">
         <p-iconField iconPosition="left">
@@ -20,15 +44,17 @@
         <div class="IsbnNat">
             <p-inputOtp id="ISBN" [(ngModel)]="searchISBN" (input)="filterBooks()" [integerOnly]="true" [length]="13" />
             <div class="card flex justify-content-center">
-                <p-multiSelect [style]="{width:'300px'}" id="NationalitateSelect" [options]="nationalitati"
-                    [(ngModel)]="selectedNationalitati" optionLabel="numeNationalitate" placeholder="Nationalitate" />
+                <div class="siderSelect">
+                    <p-multiSelect [style]="{width:'360px'}" [options]="nationalitati"
+                        [(ngModel)]="selectedNationalitati" optionLabel="numeNationalitate"
+                        placeholder="Nationalitate" />
+                    <p-button [style]="{'margin-left' :'25px', 'background-color':'#F05A7E','border':'none'}"
+                        (onClick)="sidebarVisible = true" label="Favorite Books" icon="pi pi-heart" />
+                </div>
+
             </div>
         </div>
     </section>
-
-    <p-tabMenu class="menuItems" [model]="Menuitems" [(activeItem)]="activeItem"
-        (activeItemChange)="onActiveItemChange($event)" />
-
     <hr>
     <section class="card-section">
         <p-card *ngFor="let card of filteredCards" class="bookCards" [header]="card.header">
@@ -39,7 +65,12 @@
                 <p class="author-list">{{ card.subheader }}</p>
             </ng-template>
             <ng-template pTemplate="footer">
-                <p>{{ card.footer }}</p>
+                <div style="display: flex; align-items: center; gap:22px">
+                    <p>{{ card.footer }}</p>
+                    <p-button
+                        [style]="{'background-color':'none','border':'none', 'max-width':'25px','max-height':'25px'}"
+                        icon="pi pi-heart" />
+                </div>
             </ng-template>
         </p-card>
     </section>

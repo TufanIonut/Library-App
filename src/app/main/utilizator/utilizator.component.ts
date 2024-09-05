@@ -13,10 +13,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AppServiceService } from '../../../_core/app-service.service';
 import { Nationalitaty } from '../../../Models/Nationality';
-import { MenuItem } from 'primeng/api';
-import { TabMenuModule } from 'primeng/tabmenu';
 import { SelectButtonModule } from 'primeng/selectbutton';
-
+import { SidebarModule } from 'primeng/sidebar';
+import { Book } from '../../../Models/Book';
 @Component({
   selector: 'app-utilizator',
   standalone: true,
@@ -33,16 +32,15 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     InputTextModule,
     MultiSelectModule,
     SelectButtonModule,
-    TabMenuModule,
+    SidebarModule
 
   ],
   templateUrl: './utilizator.component.html',
   styleUrls: ['./utilizator.component.scss']
 })
 export class UtilizatorComponent implements OnInit {
-  Menuitems: MenuItem[] | undefined;
-  activeItem: MenuItem | undefined;
-
+  sidebarVisible: boolean = false;
+  favoriteBooks: Book[] | undefined;
   selectedNationalitati!: Nationalitaty[];
   cards: any[] = [];
   filteredCards: any[] = [];
@@ -65,7 +63,7 @@ export class UtilizatorComponent implements OnInit {
       { label: 'Carti', icon: 'pi pi-book' },
       { label: 'Utilizator', icon: 'pi pi-users' },
     ];
-    this.activeItem = this.items[0];
+
 
 
     this.service.getNationalities().subscribe({
@@ -102,12 +100,7 @@ export class UtilizatorComponent implements OnInit {
   BecomeAdmin() {
 
   }
-  onActiveItemChange(event: MenuItem) {
-    this.activeItem = event;
-    if (this.activeItem.label === 'Utilizator') {
-      this.router.navigate(['/main/utilizator']);
-    }
-  }
+
   logout() {
     localStorage.clear();
     this.router.navigate(['auth/login']);

@@ -13,6 +13,21 @@ body {
 
 }
 
+.siderSelect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+}
+
+.siderSelect .p-multiSelect {
+    flex-grow: 1;
+}
+
+.siderSelect .p-button {
+    margin-left: auto;
+}
 
 .header {
     display: flex;
@@ -61,8 +76,8 @@ hr {
 
 .card-section {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 50px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
     padding: 20px;
     margin-top: 12px;
     margin-left: 20px;
@@ -99,6 +114,13 @@ hr {
     border-radius: 12px 12px 0 0;
 }
 
+.favoriteCardImg {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
 #NationalitateSelect {
     width: 250px;
 }
@@ -106,4 +128,31 @@ hr {
 
 .author-list {
     max-height: 30px;
+}
+
+
+// ---------Sider Cards
+.favorite-book-card {
+    width: 200px;
+    height: 70px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+
+.siderTitle {
+
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: #2980b9;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 10px 0;
+    padding: 10px;
+    border-bottom: 2px solid #2980b9;
+    display: inline-block;
+    margin-bottom: 20px;
+
 }

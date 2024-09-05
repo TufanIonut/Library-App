@@ -18,6 +18,10 @@ import { Nationalitaty } from '../../../Models/Nationality';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
+import { empty } from 'rxjs';
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -35,14 +39,17 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     AvatarModule,
     MultiSelectModule,
     CascadeSelectModule,
-    FloatLabelModule
+    FloatLabelModule,
+    ToastModule,
+    RippleModule
 
   ],
+  providers: [MessageService],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
 })
 export class AdminComponent implements OnInit {
-  constructor(private router: Router, private appService: AppServiceService) {
+  constructor(private router: Router, private appService: AppServiceService, private messageService: MessageService) {
   }
   items: MenuItem[] | undefined;
   BookCards: any[] = [];
@@ -93,6 +100,9 @@ export class AdminComponent implements OnInit {
   }
   //---------------------------------ADD BOOK
   AddBook() {
+    if (this.selectedAuthors == undefined || this.TitluTxt == undefined) {
+      this.addBookErrorBadRequest();
+    }
     console.log(this.selectedAuthors);
     this.visibleBook = false;
     if (this.selectedAuthors && this.selectedAuthors.length > 0) {
@@ -112,9 +122,13 @@ export class AdminComponent implements OnInit {
       console.log(payload);
       this.appService.addBook(payload).subscribe({
         next: (response) => {
+          this.addBookSuccess();
+          this.getBooks();
           console.log(response);
         },
+
         error: (error) => {
+          this.addBookError();
           console.log(error);
         }
       });
@@ -129,14 +143,23 @@ export class AdminComponent implements OnInit {
       prenume: this.PrenumeAutorTxt,
       idNationalitate: this.selectedNationalitate?.idNationalitate
     };
-    this.appService.addAuthor(payload).subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    if (this.NumeAutorTxt == undefined && this.PrenumeAutorTxt == undefined) {
+      this.addAuthorsBadRequest();
+    } else if (this.selectedNationalitate == undefined) {
+      this.addAuthorsBadRequestNationalitate();
+    } else {
+      this.appService.addAuthor(payload).subscribe({
+        next: (response) => {
+          this.addAuthorSuccess();
+          this.getAuthorsForCards();
+          console.log(response);
+        },
+        error: (error) => {
+          this.addAuthorError();
+          console.log(error);
+        }
+      });
+    }
 
     console.log(payload);
   }
@@ -203,5 +226,29 @@ export class AdminComponent implements OnInit {
   logout() {
     localStorage.clear();
     this.router.navigate(['auth/login']);
+  }
+
+  //--------------------------------------------------Meesssageeeeessss
+  addAuthorSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Autor adaugat cu success' });
+  }
+  addAuthorError() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Autor deja existent' });
+  }
+
+  addBookSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Carte adaugata cu success' });
+  }
+  addBookError() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Carte deja existenta' });
+  }
+  addBookErrorBadRequest() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Titlul si autorii trebuie completate' });
+  }
+  addAuthorsBadRequest() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Numele si Prenumele trebuie completate' });
+  }
+  addAuthorsBadRequestNationalitate() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Alegeti nationalitatea' });
   }
 }
