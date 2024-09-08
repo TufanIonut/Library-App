@@ -16,6 +16,9 @@ import { Nationalitaty } from '../../../Models/Nationality';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarModule } from 'primeng/sidebar';
 import { Book } from '../../../Models/Book';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
 @Component({
   selector: 'app-utilizator',
   standalone: true,
@@ -32,9 +35,12 @@ import { Book } from '../../../Models/Book';
     InputTextModule,
     MultiSelectModule,
     SelectButtonModule,
-    SidebarModule
+    SidebarModule,
+    ToastModule,
+    RippleModule
 
   ],
+  providers: [MessageService],
   templateUrl: './utilizator.component.html',
   styleUrls: ['./utilizator.component.scss']
 })
@@ -54,18 +60,32 @@ export class UtilizatorComponent implements OnInit {
   nationalitati: Nationalitaty[] | undefined;
   selectedNationalitate: Nationalitaty | undefined;
   value: string = 'off';
-
-  constructor(private router: Router, private service: AppServiceService) { }
-
+  checkAdmin = false;
+  favoritecards: any[] = [];
+  constructor(private router: Router, private service: AppServiceService, private messageService: MessageService) { }
+  email: any;
   ngOnInit() {
     this.items = [
       { label: 'Autori', icon: 'pi pi-pen-to-square' },
       { label: 'Carti', icon: 'pi pi-book' },
       { label: 'Utilizator', icon: 'pi pi-users' },
     ];
-
-
-
+    this.email = localStorage.getItem("email");
+    this.service.checkAdmin(this.email).subscribe({
+      next: (response) => {
+        if (response == 1) {
+          this.checkAdmin = true;
+          console.log(this.checkAdmin)
+        }
+        else {
+          this.checkAdmin = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+    this.getBookCards();
     this.service.getNationalities().subscribe({
       next: (response) => {
         this.nationalitati = response;
@@ -76,15 +96,23 @@ export class UtilizatorComponent implements OnInit {
       }
     });
 
-    this.service.getBooks().subscribe((data: any) => {
+
+  }
+
+  getBookCards() {
+    this.service.getBooks(this.email).subscribe((data: any) => {
       this.cards = data.map((book: any) => {
         return {
           header: book.titlu,
           subheader: `Authors: ${book.authors}`,
           footer: `ISBN: ${book.isbn}`,
+          isFavorite: book.isFavorite,
+          idCarte: book.idCarte,
           imageSrc: 'assets/book.jpeg',
         };
       });
+      this.favoritecards = this.cards.filter((card: any) => card.isFavorite == 1);
+      console.log(this.favoritecards)
       this.filteredCards = [...this.cards];
       console.log(data);
     });
@@ -98,7 +126,55 @@ export class UtilizatorComponent implements OnInit {
     });
   }
   BecomeAdmin() {
+    const payload = {
+      from: localStorage.getItem("email"),
+      subject: "Administrator rights request",
+      body: `The user with email: ${localStorage.getItem("email")} would like to request administrator rights`
+    };
+    this.service.sendMail(payload).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.sendMailSuccess();
+        window.location.reload()
+      },
+      error: (error) => {
+        console.log(error);
+        this.sendMailError();
+      }
+    });
+  }
 
+  addBookToFavorite(IdBook: any) {
+    const payload = {
+      email: localStorage.getItem("email"),
+      idCarte: IdBook
+    };
+    console.log(payload)
+    this.service.addBooktoFavorites(payload).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.showFavoriteSuccess();
+        this.getBookCards();
+      },
+      error: (error) => {
+        console.log(error);
+        this.showFavoriteError();
+      }
+    });
+  }
+  showFavoriteSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Carte adaugata la favorite' });
+  }
+  showFavoriteError() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cartea se afla deja in sectiunea de favorite' });
+  }
+
+
+  sendMailSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Email trimis cu success' });
+  }
+  sendMailError() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Eroare la trimiterea email-ului' });
   }
 
   logout() {

@@ -21,7 +21,6 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
-import { empty } from 'rxjs';
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -64,7 +63,6 @@ export class AdminComponent implements OnInit {
   NumeAutorTxt: any;
   PrenumeAutorTxt: any;
   ngOnInit() {
-    this.checkAdmin();
     this.items = [
       { label: 'Autori', icon: 'pi pi-pen-to-square' },
       { label: 'Carti', icon: 'pi pi-book' },
@@ -199,8 +197,10 @@ export class AdminComponent implements OnInit {
       });
     });
   }
+  email = localStorage.getItem("email");
   getBooks() {
-    this.appService.getBooks().subscribe((data: any) => {
+
+    this.appService.getBooks(this.email).subscribe((data: any) => {
       this.BookCards = data.map((book: any) => {
         return {
           header: book.titlu,
@@ -213,16 +213,7 @@ export class AdminComponent implements OnInit {
     });
   }
   //---------------------------------------------------------
-  checkAdmin() {
-    this.appService.checkAdmin().subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
-  }
+
   logout() {
     localStorage.clear();
     this.router.navigate(['auth/login']);

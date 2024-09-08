@@ -14,8 +14,8 @@ export class AppServiceService {
   getAuthors(): Observable<any> {
     return this.httpClient.get(`${this.serverUrl}/Author/GetAuthors`);
   }
-  getBooks(): Observable<any> {
-    return this.httpClient.get(`${this.serverUrl}/Book/GetBooks`);
+  getBooks(email: any): Observable<any> {
+    return this.httpClient.get(`${this.serverUrl}/Book/GetBooks?email=${email}`);
   }
   loginUser(body: any): Observable<any> {
     return this.httpClient.post(this.serverUrl + '/User/AuthenticateUser', body);
@@ -32,7 +32,13 @@ export class AppServiceService {
   addBook(body: any): Observable<any> {
     return this.httpClient.post(this.serverUrl + '/Book/AddBookWithAuthors', body);
   }
-  checkAdmin(): Observable<any> {
-    return this.httpClient.get(this.serverUrl + '/User/GetAdmin');
+  checkAdmin(body: any): Observable<any> {
+    return this.httpClient.get(`${this.serverUrl}/User/CheckForAdmin?email=${body}`);
+  }
+  sendMail(body: any): Observable<any> {
+    return this.httpClient.post(this.serverUrl + '/User/SendMail', body);
+  }
+  addBooktoFavorites(body: any): Observable<any> {
+    return this.httpClient.post(this.serverUrl + '/Book/AddBookToFavorites', body);
   }
 }

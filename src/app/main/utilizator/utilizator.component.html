@@ -1,11 +1,12 @@
 <body>
+    <p-toast />
     <p-sidebar [(visible)]="sidebarVisible" [style]="{width:'500px'}">
         <ng-template pTemplate="header">
             <span class="siderTitle">Favorite Books</span>
         </ng-template>
 
         <section>
-            <p-card *ngFor="let card of filteredCards" class="favoritebookCards">
+            <p-card *ngFor="let card of favoritecards" class="favoritebookCards">
                 <ng-template pTemplate="footer">
                     <div style="display: flex; align-items: center; gap:15px">
                         <img alt="Card" class="favoriteCardImg" src="assets/header.jpeg" />
@@ -15,7 +16,7 @@
                                 <p style="margin: 0;">{{ card.subheader }}</p>
                             </div>
                             <p-button
-                                [style]="{'background-color':'none','border':'none', 'max-width':'25px','max-height':'25px'}"
+                                [style]="{'background-color':'#F05A7E','border':'none', 'max-width':'25px','max-height':'25px'}"
                                 icon="pi pi-heart" />
                         </div>
                     </div>
@@ -28,7 +29,8 @@
             <h1 class="title">Digital Library</h1>
             <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (click)="logout()" />
         </div>
-        <p-button [style]="{'margin-right' :'10px'}" id="AdmimButon" label="Request Admin" (onClick)="BecomeAdmin()" />
+        <p-button [style]="{'margin-right' :'10px'}" id="AdmimButon" label="Request Admin" (onClick)="BecomeAdmin()"
+            [disabled]="checkAdmin" />
     </div>
     <section class="search-section">
         <p-iconField iconPosition="left">
@@ -68,8 +70,8 @@
                 <div style="display: flex; align-items: center; gap:22px">
                     <p>{{ card.footer }}</p>
                     <p-button
-                        [style]="{'background-color':'none','border':'none', 'max-width':'25px','max-height':'25px'}"
-                        icon="pi pi-heart" />
+                        [style]="{'background-color':card.isFavorite ? '#F05A7E' : 'default','border':'none', 'max-width':'25px','max-height':'25px'}"
+                        icon="pi pi-heart" (onClick)="addBookToFavorite(card.idCarte)" />
                 </div>
             </ng-template>
         </p-card>

@@ -50,13 +50,13 @@ export class LoginComponent {
         var role = parseInt(response.role);
         localStorage.setItem('JWT', response.token);
         localStorage.setItem('role', response.role);
+        localStorage.setItem('email', response.email);
         this.showLoginSuccess();
         setTimeout(() => {
           if (role == 0) {
             this.router.navigate(['/main/admin']);
           }
           else if (role == 1) {
-            localStorage.setItem('email', response.email);
             this.router.navigate(['/main/utilizator']);
           }
         }, 1000);
