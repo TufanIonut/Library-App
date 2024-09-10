@@ -17,7 +17,7 @@
                             </div>
                             <p-button
                                 [style]="{'background-color':'#F05A7E','border':'none', 'max-width':'25px','max-height':'25px'}"
-                                icon="pi pi-heart" />
+                                icon="pi pi-heart" (onClick)="deleteFavoriteBook(card.idCarte)" />
                         </div>
                     </div>
                 </ng-template>
@@ -48,8 +48,8 @@
             <div class="card flex justify-content-center">
                 <div class="siderSelect">
                     <p-multiSelect [style]="{width:'360px'}" [options]="nationalitati"
-                        [(ngModel)]="selectedNationalitati" optionLabel="numeNationalitate"
-                        placeholder="Nationalitate" />
+                        [(ngModel)]="selectedNationalitati" optionLabel="numeNationalitate" placeholder="Nationalitate"
+                        (onChange)="filterBooks()" />
                     <p-button [style]="{'margin-left' :'25px', 'background-color':'#F05A7E','border':'none'}"
                         (onClick)="sidebarVisible = true" label="Favorite Books" icon="pi pi-heart" />
                 </div>

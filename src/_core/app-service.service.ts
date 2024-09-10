@@ -41,4 +41,7 @@ export class AppServiceService {
   addBooktoFavorites(body: any): Observable<any> {
     return this.httpClient.post(this.serverUrl + '/Book/AddBookToFavorites', body);
   }
+  deleteFavoriteBook(body: any): Observable<any> {
+    return this.httpClient.patch(this.serverUrl + '/Book/DeleteFavoriteBook', body);
+  }
 }

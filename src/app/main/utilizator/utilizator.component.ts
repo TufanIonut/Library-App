@@ -19,6 +19,8 @@ import { Book } from '../../../Models/Book';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
+import { Author } from '../../../Models/Author';
+
 @Component({
   selector: 'app-utilizator',
   standalone: true,
@@ -62,6 +64,15 @@ export class UtilizatorComponent implements OnInit {
   value: string = 'off';
   checkAdmin = false;
   favoritecards: any[] = [];
+  Authors: Author[] | undefined;
+  author: Author = {
+    idAutor: 0,
+    NumeAutor: '',
+    PrenumeAutor: '',
+    Nationalitate: '',
+    codNationalitate: ''
+  };
+
   constructor(private router: Router, private service: AppServiceService, private messageService: MessageService) { }
   email: any;
   ngOnInit() {
@@ -85,6 +96,7 @@ export class UtilizatorComponent implements OnInit {
         console.log(error);
       }
     });
+    this.getAuthors();
     this.getBookCards();
     this.service.getNationalities().subscribe({
       next: (response) => {
@@ -95,10 +107,18 @@ export class UtilizatorComponent implements OnInit {
         console.log(error);
       }
     });
-
-
   }
-
+  getAuthors() {
+    this.service.getAuthors().subscribe({
+      next: (response) => {
+        this.Authors = response;
+        console.log(this.Authors)
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
   getBookCards() {
     this.service.getBooks(this.email).subscribe((data: any) => {
       this.cards = data.map((book: any) => {
@@ -108,6 +128,7 @@ export class UtilizatorComponent implements OnInit {
           footer: `ISBN: ${book.isbn}`,
           isFavorite: book.isFavorite,
           idCarte: book.idCarte,
+          nationalitati: book.nationalities,
           imageSrc: 'assets/book.jpeg',
         };
       });
@@ -122,7 +143,11 @@ export class UtilizatorComponent implements OnInit {
       const matchesTitle = card.header.toLowerCase().includes(this.searchTitle.toLowerCase());
       const matchesAuthor = card.subheader.toLowerCase().includes(this.searchAuthor.toLowerCase());
       const matchesISBN = card.footer.includes(`ISBN: ${this.searchISBN}`);
-      return matchesTitle && matchesAuthor && matchesISBN;
+      const cardNationalities: string[] = card.nationalitati.split(',').map((nat: string) => nat.trim());
+      const selectedNationalitiesSet: Set<string> = new Set(this.selectedNationalitati.map(nat => nat.numeNationalitate));
+      const hasSelectedNationalities = this.selectedNationalitati.length > 0;
+      const matchesNationalitati = !hasSelectedNationalities || cardNationalities.some((nat: string) => selectedNationalitiesSet.has(nat));
+      return matchesTitle && matchesAuthor && matchesISBN && matchesNationalitati;
     });
   }
   BecomeAdmin() {
@@ -162,13 +187,36 @@ export class UtilizatorComponent implements OnInit {
       }
     });
   }
+  deleteFavoriteBook(IdBook: any) {
+    const payload = {
+      email: localStorage.getItem("email"),
+      idCarte: IdBook
+    }
+    this.service.deleteFavoriteBook(payload).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.showDeleteFavoriteSuccess();
+        this.getBookCards();
+      },
+      error: (error) => {
+        console.log(error);
+        this.showDeleteFavoriteError();
+      }
+
+    });
+  }
   showFavoriteSuccess() {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Carte adaugata la favorite' });
   }
   showFavoriteError() {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cartea se afla deja in sectiunea de favorite' });
   }
-
+  showDeleteFavoriteSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Carte stearsa din favorite' });
+  }
+  showDeleteFavoriteError() {
+    this.messageService.add({ severity: 'warn', summary: 'Error', detail: 'Eroare la stergerea cartii favorite' });
+  }
 
   sendMailSuccess() {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Email trimis cu success' });
@@ -176,7 +224,6 @@ export class UtilizatorComponent implements OnInit {
   sendMailError() {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Eroare la trimiterea email-ului' });
   }
-
   logout() {
     localStorage.clear();
     this.router.navigate(['auth/login']);

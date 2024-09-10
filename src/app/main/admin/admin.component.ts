@@ -226,7 +226,6 @@ export class AdminComponent implements OnInit {
   addAuthorError() {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Autor deja existent' });
   }
-
   addBookSuccess() {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Carte adaugata cu success' });
   }
