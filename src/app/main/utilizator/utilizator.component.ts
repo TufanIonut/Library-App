@@ -143,13 +143,14 @@ export class UtilizatorComponent implements OnInit {
       const matchesTitle = card.header.toLowerCase().includes(this.searchTitle.toLowerCase());
       const matchesAuthor = card.subheader.toLowerCase().includes(this.searchAuthor.toLowerCase());
       const matchesISBN = card.footer.includes(`ISBN: ${this.searchISBN}`);
-      const cardNationalities: string[] = card.nationalitati.split(',').map((nat: string) => nat.trim());
-      const selectedNationalitiesSet: Set<string> = new Set(this.selectedNationalitati.map(nat => nat.numeNationalitate));
-      const hasSelectedNationalities = this.selectedNationalitati.length > 0;
-      const matchesNationalitati = !hasSelectedNationalities || cardNationalities.some((nat: string) => selectedNationalitiesSet.has(nat));
+      const cardNationalities: string[] = card.nationalitati ? card.nationalitati.split(',').map((nat: any) => nat.trim()) : [];
+      const selectedNationalitiesSet: Set<string> = new Set((this.selectedNationalitati || []).map(nat => nat.numeNationalitate));
+      const hasSelectedNationalities = this.selectedNationalitati && this.selectedNationalitati.length > 0;
+      const matchesNationalitati = !hasSelectedNationalities || cardNationalities.some(nat => selectedNationalitiesSet.has(nat));
       return matchesTitle && matchesAuthor && matchesISBN && matchesNationalitati;
     });
   }
+
   BecomeAdmin() {
     const payload = {
       from: localStorage.getItem("email"),
